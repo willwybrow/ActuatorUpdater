@@ -1,0 +1,7 @@
+sites:
+- master_key: abcdef1234567890
+  url: http://place.com
+- master_key: MASTER KEY
+  url: https://netbin-nbdemo.fsqr.net
+- master_key: ojiopjepojefefefefef
+  url: https://site
