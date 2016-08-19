@@ -61,7 +61,7 @@ class ConnectionWindow(Toplevel):
                 return
 
         child = AddEditConnectionWindow(self, site_to_connect)
-        # child.geometry('500x200+200+200')
+        child.geometry('+200+200')
         child.grab_set()
         self.wait_window(child)
 
@@ -143,7 +143,7 @@ class AddEditConnectionWindow(Toplevel):
 
     def ok(self, event):
         site = self.validate()
-        print(site)
+        # print(site)
         if site is not None:
             site = self.parent.add_or_edit_site(site)
         if site is not None:

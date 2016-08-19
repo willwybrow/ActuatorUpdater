@@ -41,7 +41,7 @@ def main():
     command_thread.quit()
     command_thread.join()
 
-    print("Exiting...")
+    # print("Exiting...")
 
 
 if __name__ == '__main__':

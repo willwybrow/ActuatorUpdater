@@ -110,12 +110,12 @@ class MainWindow(Frame):
 
     def delete_device_from_actuator_list(self, event):
         try:
-            print self.actuator_list.curselection()
+            # print self.actuator_list.curselection()
             selected_index = int(self.actuator_list.curselection()[0])
             self._actuate_device_list.set(tuple(list(self._actuate_device_list.ultra_true)[:selected_index] + list(self._actuate_device_list.ultra_true)[selected_index+1:]))
             # self.actuator_list.delete(selected_index)
         except Exception as e:
-            print e
+            # print e
             pass
 
     def record_status_history(self, status):
@@ -127,18 +127,19 @@ class MainWindow(Frame):
         self.issue_command(Command(commands.load_device_list, None))
 
     def select_device(self, event):
-        print("Selecting device...")
+        # print("Selecting device...")
         listbox = event.widget
         try:
             selected_index = listbox.curselection()[0]
             device_list = self._global_state[StateUpdate.KEY_DEVICE_LIST].ultra_true
             device = device_list[int(selected_index)]
-            print("Selected device {}".format(device.device_id))
+            # print("Selected device {}".format(device.device_id))
             self.view_device(device)
         # except IndexError:
         #     listbox.focus_get()
         except Exception as e:
-            print e
+            # print e
+            pass
 
     def click_to_start(self, event):
         self.issue_command(Command(commands.start_actuating, [(d if d.device_id not in self._loaded_devices else self._loaded_devices[d.device_id]) for d in self._actuate_device_list.ultra_true]))
@@ -147,7 +148,7 @@ class MainWindow(Frame):
         self.issue_command(Command(commands.stop_actuating, None))
 
     def select_channel(self, event):
-        print("Selecting channel...")
+        # print("Selecting channel...")
         listbox = event.widget
         # load channel values
 
@@ -207,7 +208,7 @@ class MainWindow(Frame):
                 if hasattr(status, 'global_state'):
                     self.update_global_state(status.global_state)
                 if hasattr(status, 'loaded_device'):
-                    print("A device has been loaded in the background!")
+                    # print("A device has been loaded in the background!")
                     self.update_loaded_device(status.loaded_device)
                 self.status.set("%s", status.message)
             except Queue.Empty:
@@ -264,7 +265,7 @@ class MainWindow(Frame):
         # print self._global_state
 
     def update_loaded_device(self, loaded_device):
-        print(loaded_device.__repr__())
+        # print(loaded_device.__repr__())
         self._loaded_devices[loaded_device.device_id] = loaded_device
         self.current_device_panel.loaded_device(loaded_device)
 

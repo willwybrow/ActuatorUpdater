@@ -193,7 +193,7 @@ class CurrentDevicePanel(Frame):
         try:
             self.populate_fields_from_device()
         except (AttributeError, KeyError, NameError) as e:
-            print e
+            pass  # print e
 
     def populate_fields_from_device(self):
         # print("using {}".format(self._device.__repr__()))

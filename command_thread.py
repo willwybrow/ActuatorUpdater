@@ -148,7 +148,7 @@ class CommandThread(Thread):
         self._quitting = True
 
     def run(self):
-        print("Launching background thread!")
+        # print("Launching background thread!")
         while not self._quitting:
             if self._site is not None:
                 if self._actuating:
