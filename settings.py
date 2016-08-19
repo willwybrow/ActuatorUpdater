@@ -30,6 +30,8 @@ class Settings:
             raise SettingsError("This settings file is missing a 'sites' parameter!")
         except TypeError:
             raise SettingsError("This settings file is badly formatted!")
+        except IOError:
+            open(filename, mode='wb', encoding='utf-8').close()
 
     def write_to_file(self, filename="config.yaml"):
         from yaml import dump
