@@ -20,12 +20,13 @@ class Settings:
         from codecs import open
 
         try:
-            loaded_settings = load(open(filename, mode='rb', encoding='utf-8'))
-            for loaded_site in loaded_settings['sites']:
-                try:
-                    self._sites.append(Site(loaded_site['url'], loaded_site['master_key']))
-                except KeyError:
-                    pass
+            with open(filename, mode='rb', encoding='utf-8') as f:
+                loaded_settings = load(f)
+                for loaded_site in loaded_settings['sites']:
+                    try:
+                        self._sites.append(Site(loaded_site['url'], loaded_site['master_key']))
+                    except KeyError:
+                        pass
         except KeyError:
             raise SettingsError("This settings file is missing a 'sites' parameter!")
         except TypeError:
@@ -36,9 +37,10 @@ class Settings:
     def write_to_file(self, filename="config.yaml"):
         from yaml import dump
         from codecs import open
-
+        print "WRITE TO FILE!!!!!!"
         settings_dict = {'sites': [{'url': s.url, 'master_key': s.key} for s in self._sites]}
-        dump(settings_dict, stream=open(filename, mode='wb', encoding='utf-8'), default_flow_style=False)
+        with open(filename, mode='wb', encoding='utf-8') as f:
+            dump(settings_dict, stream=f, default_flow_style=False)
 
     def add_site(self, site):
         if not (site.url.startswith('http://') or site.url.startswith('https://')):

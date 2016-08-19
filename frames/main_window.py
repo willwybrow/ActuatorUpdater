@@ -101,7 +101,7 @@ class MainWindow(Frame):
 
         self.consume_status_updates()
 
-        self.parent.bind("<Escape>", self._quit)
+        self.parent.bind("<Escape>", self.quit_event)
 
     def add_device_to_actuator_list(self, event):
         device = self.get_current_device()
@@ -269,10 +269,15 @@ class MainWindow(Frame):
         self._loaded_devices[loaded_device.device_id] = loaded_device
         self.current_device_panel.loaded_device(loaded_device)
 
-    def _quit(self, event):
+    def quit_event(self, event):
+        print "QUIT!!!!!!!!!!!!!"
         self.issue_command(Command(commands.shut_down_command_thread, None))
         try:
             self._site_settings.write_to_file()
-        except:
+        except Exception as e:
+            print e
             pass
         self.parent.destroy()
+
+    def quit_external(self):
+        return self.quit_event(None)

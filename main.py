@@ -29,6 +29,7 @@ def main():
     file_new(root)
     # root.app = MainWindow(root, command_queue, status_queue, site_settings)
     # root.app.pack(side=TOP, fill=BOTH, expand=1)
+    root.protocol("WM_DELETE_WINDOW", root.app.quit_external)
 
     command_thread = CommandThread(command_queue, status_queue)
     # command_thread = Thread(target=ct.run)
