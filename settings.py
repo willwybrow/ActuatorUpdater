@@ -1,3 +1,7 @@
+from appdirs import user_data_dir
+from strings import APP_AUTHOR_DIR, APP_NAME_DIR
+import os
+
 
 class SettingsError(Exception):
     pass
@@ -15,12 +19,21 @@ class Settings:
         self._sites = []
         pass
 
+    @staticmethod
+    def file_path(filename):
+        user_dir = user_data_dir(appname=APP_NAME_DIR, appauthor=APP_AUTHOR_DIR)
+        if not (os.path.exists(user_dir) and os.path.isdir(user_dir)):
+            os.makedirs(user_dir)
+        return os.path.join(user_dir, filename)
+
     def load_from_file(self, filename="config.yaml"):
         from yaml import load
         from codecs import open
 
+        full_file_path = Settings.file_path(filename)
+
         try:
-            loaded_settings = load(open(filename, mode='rb', encoding='utf-8'))
+            loaded_settings = load(open(full_file_path, mode='rb', encoding='utf-8'))
             for loaded_site in loaded_settings['sites']:
                 try:
                     self._sites.append(Site(loaded_site['url'], loaded_site['master_key']))
@@ -31,14 +44,16 @@ class Settings:
         except TypeError:
             raise SettingsError("This settings file is badly formatted!")
         except IOError:
-            open(filename, mode='wb', encoding='utf-8').close()
+            open(full_file_path, mode='wb+', encoding='utf-8').close()
 
     def write_to_file(self, filename="config.yaml"):
         from yaml import dump
         from codecs import open
 
+        full_file_path = Settings.file_path(filename)
+
         settings_dict = {'sites': [{'url': s.url, 'master_key': s.key} for s in self._sites]}
-        dump(settings_dict, stream=open(filename, mode='wb', encoding='utf-8'), default_flow_style=False)
+        dump(settings_dict, stream=open(full_file_path, mode='wb+', encoding='utf-8'), default_flow_style=False)
 
     def add_site(self, site):
         if not (site.url.startswith('http://') or site.url.startswith('https://')):

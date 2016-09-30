@@ -61,6 +61,7 @@ class MainWindow(Frame):
         self._command_menu = Menu(self._menu_bar, tearoff=0)
         self._command_menu.add_command(label=strings.MENU_DISCONNECTED, command=self.open_connection_window)
         self._command_menu.add_command(label="Status message history", command=self.open_status_window)
+        self._command_menu.add_command(label="Exit", command=self.menu_quit)
         self._menu_bar.add_cascade(label="Connection", menu=self._command_menu)
 
         self._command_queue = command_queue
@@ -270,6 +271,9 @@ class MainWindow(Frame):
         # print(loaded_device.__repr__())
         self._loaded_devices[loaded_device.device_id] = loaded_device
         self.current_device_panel.loaded_device(loaded_device)
+
+    def menu_quit(self):
+        self._quit(None)
 
     def _quit(self, event):
         self.issue_command(Command(commands.shut_down_command_thread, None))
