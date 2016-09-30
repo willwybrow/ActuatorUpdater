@@ -56,10 +56,12 @@ class MainWindow(Frame):
 
         self.pack(fill=BOTH, expand=1)
 
-        self._menu_bar = Menu(self)
-        self._menu_bar.add_command(label=strings.MENU_DISCONNECTED, command=self.open_connection_window)
-        self._menu_bar.add_command(label="Status message history", command=self.open_status_window)
+        self._menu_bar = Menu(self.parent)
         self.parent.config(menu=self._menu_bar)
+        self._command_menu = Menu(self._menu_bar, tearoff=0)
+        self._command_menu.add_command(label=strings.MENU_DISCONNECTED, command=self.open_connection_window)
+        self._command_menu.add_command(label="Status message history", command=self.open_status_window)
+        self._menu_bar.add_cascade(label="Connection", menu=self._command_menu)
 
         self._command_queue = command_queue
         self._status_queue = status_queue
