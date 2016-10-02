@@ -216,7 +216,7 @@ class MainWindow(Frame):
                 self.status.set("%s", status.message)
             except Queue.Empty:
                 break
-        self.after(100, self.consume_status_updates)
+        self.after(500, self.consume_status_updates)
 
     def connect_to_site(self, site):
         self.add_status_update(StatusMessage("Connecting to {}".format(site.url)))

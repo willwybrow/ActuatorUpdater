@@ -113,8 +113,8 @@ class ActuatingThread(Thread):
                                     # except Exception as e:
                                     #     print e
                                     self._status_queue.put(StatusMessage("Discovered pending actuator write {}".format(dp)))
-                                    dp['id'] = channel_id.replace("Actuator-8", "Sensor-0")
-                                    j_put['channels'].append(dp)
+                                    # dp['id'] = channel_id.replace("Actuator-8", "Sensor-0")
+                                    j_put['channels'].append({'id': channel_id.replace("Actuator-8", "Sensor-0"), 'currentValue': dp['value'], 'updatedAt': dp['at']})
                         except Exception as e:
                             # self._exclude_because_of_errors.append(device.device_id)  # to add in future
                             # "It will be skipped in future!"
@@ -122,7 +122,12 @@ class ActuatingThread(Thread):
                             break
                 if 'channels' in j_put and len(j_put['channels']) > 0:
                     self._status_queue.put(StatusMessage("Doing a PUT device:\n{}".format(j_put)))
-                    connection.put_device(self._site, device_id, j_put)
+                    try:
+                        response_text = connection.put_device(self._site, device_id, j_put)
+                        self._status_queue.put(StatusMessage("Finished PUT:\n{}".format(response_text)))
+                    except Exception as e:
+                        print(e)
+                        self._status_queue.put(StatusMessage("Error: {}".format(e)))
                 for channel_id, bounds in dt_bounds.iteritems():
                     self._status_queue.put(StatusMessage("Deleting readings for channel {}:{} from {} to {}".format(device_id, channel_id, bounds['min'], bounds['max'])))
                     connection.delete_channel_readings(self._site, device_id, channel_id, bounds['min'], bounds['max'])
