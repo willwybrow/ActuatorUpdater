@@ -78,6 +78,7 @@ def put_device(site, device_id, channel_j):
 
     r = requests.put(background_commands.api.get_device(url, device_id), headers=headers, data=json.dumps(channel_j))
     r.raise_for_status()
+    return r.text
 
 
 def delete_channel_readings(site, device_id, channel_id, start, end):
